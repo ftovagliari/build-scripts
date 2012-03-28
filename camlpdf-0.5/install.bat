@@ -1,9 +1,14 @@
 cls
 setlocal
+
 REM Configuration Section ====================================================
 
+set LIB=%LIB%
+set INCLUDE=%INCLUDE%
 set OCAMLLIB=%OCAMLLIB%
+set ZLIB=C:\zlib\lib
 set INSTALLDIR="%OCAMLLIB%"\cpdf
+set INSTALLDIR_DOC="%OCAMLLIB%"\..\doc\cpdf
 set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib -LC:\zlib\lib
 
 REM End of Configuration Section ==============================================
@@ -11,7 +16,7 @@ REM End of Configuration Section ==============================================
 del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll
 
 cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /DPIC 
-lib /nologo /out:libcamlpdf.lib /libpath:C:\zlib\lib zlib.lib zlibstubs.obj
+lib /nologo /out:libcamlpdf.lib /libpath:%ZLIB% zlib.lib zlibstubs.obj
 flexlink -o dllcamlpdf.dll zlibstubs.obj zlib.lib %CCOPT% -LC:\zlib\lib -default-manifest
 
 ocamlopt.opt -c utility.mli
@@ -92,8 +97,8 @@ copy *.mli %INSTALLDIR%
 copy cpdf.lib %INSTALLDIR%
 copy libcamlpdf.lib "%OCAMLLIB%"
 copy dllcamlpdf.dll "%OCAMLLIB%"\stublibs
-mkdir %INSTALLDIR%\doc
-copy doc\* %INSTALLDIR%\doc
+mkdir %INSTALLDIR_DOC%
+copy doc\* %INSTALLDIR_DOC%
 
 rmdir /S /Q doc
 del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll

@@ -1,2 +1,2 @@
-A collection of batch scripts for building OCaml libraries from source for use with the
-Windows MSVC port of OCaml.
+A collection of batch scripts for building OCaml libraries from source for use
+with the Windows MSVC port of OCaml.

@@ -1,9 +1,11 @@
 cls
 setlocal
-REM configuration_sectrion ====================================================
+REM Configuration Section ====================================================
+
 set OCAMLLIB=%OCAMLLIB%
 set INSTALLDIR="%OCAMLLIB%"\zip
 set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib -LC:\zlib\lib
+
 REM End of Configuration Section ==============================================
 
 del *.obj *.lib *.cm* *.exe *.dll dllcamlzip.dll.manifest

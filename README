@@ -1,0 +1,2 @@
+Batch scripts for building some ocaml libraries from source for use with the
+Windows MSVC port of OCaml.

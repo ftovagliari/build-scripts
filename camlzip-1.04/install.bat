@@ -24,12 +24,14 @@ ocamlopt.opt -g -c zip.ml
 ocamlopt.opt -g -c gzip.mli
 ocamlopt.opt -g -c gzip.ml
 
-ocamlopt.opt -verbose -g -a -o zip.cmxa -ccopt "%CCOPT%" -cclib -lcamlzip -cclib -lz zlib.cmx zip.cmx gzip.cmx 
+ocamlopt.opt -verbose -g -a -o zlib.cmxa -ccopt "%CCOPT%" -cclib -lcamlzip -cclib -lz zlib.cmx 
+ocamlopt.opt -verbose -g -a -o zip.cmxa -ccopt "%CCOPT%" -cclib -lcamlzip -cclib -lz zip.cmx gzip.cmx 
+
 
 :test =========================================================================
 pushd test
 del *.obj *.lib *.cm* *.exe *.zip
-ocamlopt.opt -g -o minizip.exe -I .. unix.cmxa ../zip.cmxa minizip.ml 
+ocamlopt.opt -g -o minizip.exe -I .. unix.cmxa ../zlib.cmxa ../zip.cmxa minizip.ml 
 minizip c test.zip testzlib.ml minizip.ml minigzip.ml
 test.zip
 del test.zip *.exe *.obj *.cm*
@@ -45,6 +47,7 @@ copy *.cmi %INSTALLDIR%
 copy *.cmxa %INSTALLDIR%
 copy *.mli %INSTALLDIR%
 copy zip.lib %INSTALLDIR%
+copy zlib.lib %INSTALLDIR%
 copy libcamlzip.lib "%OCAMLLIB%"
 copy dllcamlzip.dll "%OCAMLLIB%"\stublibs
 mkdir %INSTALLDIR_DOC%

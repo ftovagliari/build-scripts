@@ -92,7 +92,7 @@ hello.pdf
 
 :doc ==========================================================================
 mkdir doc
-ocamldoc -html -d doc *.mli
+ocamldoc -html -t "Camlpdf" -d doc *.mli
 
 :install ======================================================================
 mkdir %INSTALLDIR%

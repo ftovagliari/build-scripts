@@ -1,23 +1,35 @@
-cls
-setlocal
+@cls
+@for %%F in (%cd%) do @set name=%%~nF%%~xF
+@title "Installing %name%"
+@setlocal
+@set cwd=%cd%
+@call "%ProgramFiles(x86)%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
+@cd %cwd%
+@echo Current working directory: %cd%
 
-REM Configuration Section ====================================================
+@set OCAMLLIB=
+@for /f %%x in ('ocamlc -where') do @set OCAMLLIB=%%x
+@set OCAMLLIB=%OCAMLLIB:/=\%
+@echo OCAMLLIB=%OCAMLLIB%
+
+@REM Configuration Section ====================================================
 
 set LIB=%LIB%
 set INCLUDE=%INCLUDE%
 set OCAMLLIB=%OCAMLLIB%
-set ZLIB=C:\zlib\lib
+set ZLIB=C:\zlib
 set INSTALLDIR="%OCAMLLIB%"\cpdf
 set INSTALLDIR_DOC="%OCAMLLIB%"\..\doc\cpdf
-set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib -LC:\zlib\lib
+@rem set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib -L%ZLIB%\lib
+set CCOPT=-LC:\PROGRA~1\MICROS~3\v7.0\lib -LC:\PROGRA~2\MICROS~1.0\VC\lib -LC:\PROGRA~2\MICROS~1.0\VC\ATLFMC\lib -L%ZLIB%\lib
 
-REM End of Configuration Section ==============================================
+@REM End of Configuration Section ==============================================
 
-del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll
+@del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll
 
-cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /DPIC 
-lib /nologo /out:libcamlpdf.lib /libpath:%ZLIB% zlib.lib zlibstubs.obj
-flexlink -o dllcamlpdf.dll zlibstubs.obj zlib.lib %CCOPT% -LC:\zlib\lib -default-manifest
+cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /I%ZLIB%\include /DPIC 
+lib /nologo /out:libcamlpdf.lib /libpath:%ZLIB%\lib zlibstat.lib zlibstubs.obj
+flexlink -o dllcamlpdf.dll zlibstubs.obj zlibstat.lib %CCOPT% -L%ZLIB%\lib -default-manifest
 
 ocamlopt.opt -c utility.mli
 ocamlopt.opt -c utility.ml
@@ -100,8 +112,9 @@ copy dllcamlpdf.dll "%OCAMLLIB%"\stublibs
 mkdir %INSTALLDIR_DOC%
 copy doc\* %INSTALLDIR_DOC%
 
-rmdir /S /Q doc
-del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll
+@rmdir /S /Q doc
+@del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll
 
 :exit =========================================================================
-endlocal
+@endlocal
+@pause

@@ -4,6 +4,7 @@
 @setlocal
 @set cwd=%cd%
 @call "%ProgramFiles(x86)%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
+@call ..\build-scripts\setenv.bat
 @cd %cwd%
 @echo Current working directory: %cd%
 
@@ -24,6 +25,8 @@ set INSTALLDIR_DOC="%OCAMLLIB%"\..\doc\cryptokit
 set CCOPT=-LC:\PROGRA~1\MICROS~3\v7.0\lib -LC:\PROGRA~2\MICROS~1.0\VC\lib -LC:\PROGRA~2\MICROS~1.0\VC\ATLFMC\lib -L%ZLIB%\lib
 
 @REM End of Configuration Section ==============================================
+
+pushd src
 
 @del *.obj *.lib *.cm* *.exe *.dll dllcryptokit.dll.manifest
 
@@ -83,23 +86,27 @@ mkdir doc
 ocamldoc -html -t "Criptokit"-d doc *.mli
 
 :install ======================================================================
-copy cryptokit.cmxa cryptokit.cmx cryptokit.lib "%OCAMLLIB%"
+ocamlfind remove cryptokit
+ocamlfind install cryptokit META
 
-mkdir %INSTALLDIR%
-copy *.cmi %INSTALLDIR%
-copy *.cmxa %INSTALLDIR%
-copy *.mli %INSTALLDIR%
-copy cryptokit.lib %INSTALLDIR%
-copy libcryptokit.lib "%OCAMLLIB%"
-copy dllcryptokit.dll "%OCAMLLIB%"\stublibs
-mkdir %INSTALLDIR_DOC%
-copy doc\* %INSTALLDIR_DOC%
-rmdir /S /Q doc
-del *.obj *.lib *.cm* *.exe *.dll dllcryptokit.dll.manifest
+rem copy cryptokit.cmxa cryptokit.cmx cryptokit.lib "%OCAMLLIB%"
+
+rem mkdir %INSTALLDIR%
+rem copy *.cmi %INSTALLDIR%
+rem copy *.cmxa %INSTALLDIR%
+rem copy *.mli %INSTALLDIR%
+rem copy cryptokit.lib %INSTALLDIR%
+rem copy libcryptokit.lib "%OCAMLLIB%"
+rem copy dllcryptokit.dll "%OCAMLLIB%"\stublibs
+rem mkdir %INSTALLDIR_DOC%
+rem copy doc\* %INSTALLDIR_DOC%
+rem rmdir /S /Q doc
+rem del *.obj *.lib *.cm* *.exe *.dll dllcryptokit.dll.manifest
 
 echo off
 
 :exit
+popd
 endlocal
 pause
 

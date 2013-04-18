@@ -1,26 +1,25 @@
-cls
-setlocal
-
-REM Configuration Section ====================================================
+@setlocal
+@call ..\build-scripts\setenv.bat
+@REM Configuration Section ====================================================
 
 set LIB=%LIB%
 set INCLUDE=%INCLUDE%
 set OCAMLLIB=%OCAMLLIB%
-set ZLIB=C:\zlib\lib
+set ZLIB=C:\zlib
 set INSTALLDIR="%OCAMLLIB%"\cpdf
 set INSTALLDIR_DOC="%OCAMLLIB%"\..\doc\cpdf
 REM set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib -LC:\zlib\lib
-set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib 
+set CCOPT=-LC:\PROGRA~1\MICROS~3\v7.0\lib -LC:\PROGRA~2\MICROS~1.0\VC\lib -LC:\PROGRA~2\MICROS~1.0\VC\ATLFMC\lib -L%ZLIB%\lib
 
 set CFLAGS=-I +zip
 
-REM End of Configuration Section ==============================================
+@REM End of Configuration Section ==============================================
 
-del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll dllcamlpdf.dll.manifest
+@del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll dllcamlpdf.dll.manifest
 
-cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /DPIC 
-lib /nologo /out:libcamlpdf.lib /libpath:%ZLIB% zlib.lib zlibstubs.obj
-flexlink -o dllcamlpdf.dll zlibstubs.obj zlib.lib %CCOPT% -LC:\zlib\lib -default-manifest
+cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /I%ZLIB%\include /DPIC 
+lib /nologo /out:libcamlpdf.lib /libpath:%ZLIB%\lib zlibstat.lib zlibstubs.obj
+flexlink -o dllcamlpdf.dll zlibstubs.obj zlibstat.lib %CCOPT% -L%ZLIB%\lib -default-manifest
 
 ocamlopt.opt -c %CFLAGS% utility.mli
 ocamlopt.opt -c %CFLAGS% utility.ml
@@ -105,8 +104,9 @@ copy dllcamlpdf.dll "%OCAMLLIB%"\stublibs
 mkdir %INSTALLDIR_DOC%
 copy doc\* %INSTALLDIR_DOC%
 
-rmdir /S /Q doc
-del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll dllcamlpdf.dll.manifest
+@rmdir /S /Q doc
+@del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll dllcamlpdf.dll.manifest
 
 :exit =========================================================================
-endlocal
+@endlocal
+@pause

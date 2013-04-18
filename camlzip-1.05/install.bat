@@ -1,4 +1,5 @@
 @cls
+@call ..\build-scripts\setenv.bat
 @for %%F in (%cd%) do @set name=%%~nF%%~xF
 @title "Installing %name%"
 @setlocal
@@ -27,8 +28,20 @@ set CCOPT=-LC:\PROGRA~1\MICROS~3\v7.0\lib -LC:\PROGRA~2\MICROS~1.0\VC\lib -LC:\P
 
 @del *.obj *.lib *.cm* *.exe *.dll dllcamlzip.dll.manifest
 cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /I%ZLIB%\include /D ZLIB_WINAPI
+
 lib /nologo /out:libcamlzip.lib /libpath:%ZLIB%\lib zlibstat.lib zlibstubs.obj
 flexlink -o dllcamlzip.dll zlibstubs.obj zlibstat.lib %CCOPT% -default-manifest
+flexlink -o dllcamlzlib.dll zlibstubs.obj zlibstat.lib %CCOPT% -default-manifest
+
+ocamlc.opt -g -c zlib.mli
+ocamlc.opt -g -c zlib.ml
+ocamlc.opt -g -c zip.mli
+ocamlc.opt -g -c zip.ml
+ocamlc.opt -g -c gzip.mli
+ocamlc.opt -g -c gzip.ml
+
+ocamlmklib -o zlib -oc camlzlib zlib.cmo gzip.cmo -L%ZLIB% -lz
+ocamlmklib -o zip -oc camlzip zip.cmo gzip.cmo -L%ZLIB% -lz 
 
 ocamlopt.opt -g -c zlib.mli
 ocamlopt.opt -g -c zlib.ml
@@ -55,19 +68,9 @@ mkdir doc
 ocamldoc -html -t "Camlzip" -d doc *.mli
 
 :install ======================================================================
-mkdir %INSTALLDIR%
-copy *.cmi %INSTALLDIR%
-copy *.cmxa %INSTALLDIR%
-copy *.mli %INSTALLDIR%
-copy zip.lib %INSTALLDIR%
-copy zlib.lib %INSTALLDIR%
-copy libcamlzip.lib "%OCAMLLIB%"
-copy dllcamlzip.dll "%OCAMLLIB%"\stublibs
-mkdir %INSTALLDIR_DOC%
-copy doc\* %INSTALLDIR_DOC%
-rmdir /S /Q doc
-del *.obj *.lib *.cm* *.exe *.dll dllcamlzip.dll.manifest
+ocamlfind remove zip
+ocamlfind install zip META *.cma *.cmxa *.cmi *.mli *.lib *.dll
 
 :exit =========================================================================
-endlocal
-pause
+@endlocal
+@pause

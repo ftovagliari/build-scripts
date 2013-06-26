@@ -23,6 +23,8 @@ set INSTALLDIR_DOC="%OCAMLLIB%"\..\doc\cpdf
 @rem set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib -L%ZLIB%\lib
 set CCOPT=-LC:\PROGRA~1\MICROS~3\v7.0\lib -LC:\PROGRA~2\MICROS~1.0\VC\lib -LC:\PROGRA~2\MICROS~1.0\VC\ATLFMC\lib -L%ZLIB%\lib
 
+set CFLAGS=-I +site-lib/zip
+
 @REM End of Configuration Section ==============================================
 
 @del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll
@@ -31,69 +33,69 @@ cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /I%ZLIB%\include /DPIC
 lib /nologo /out:libcamlpdf.lib /libpath:%ZLIB%\lib zlibstat.lib zlibstubs.obj
 flexlink -o dllcamlpdf.dll zlibstubs.obj zlibstat.lib %CCOPT% -L%ZLIB%\lib -default-manifest
 
-ocamlopt.opt -c utility.mli
-ocamlopt.opt -c utility.ml
-ocamlopt.opt -c istring.mli
-ocamlopt.opt -c istring.ml
-ocamlopt.opt -c io.mli
-ocamlopt.opt -c io.ml
-ocamlopt.opt -c unzip.mli
-ocamlopt.opt -c unzip.ml
-ocamlopt.opt -c pdfio.mli
-ocamlopt.opt -c pdfio.ml
-ocamlopt.opt -c cgenlex.mli
-ocamlopt.opt -c cgenlex.ml
-ocamlopt.opt -c zlib.mli
-ocamlopt.opt -c zlib.ml
-ocamlopt.opt -c transform.mli
-ocamlopt.opt -c transform.ml
-ocamlopt.opt -c units.mli
-ocamlopt.opt -c units.ml
-ocamlopt.opt -c paper.mli
-ocamlopt.opt -c paper.ml
-ocamlopt.opt -c pdf.mli
-ocamlopt.opt -c pdf.ml
-ocamlopt.opt -c pdfcrypt.mli
-ocamlopt.opt -c pdfcrypt.ml
-ocamlopt.opt -c pdfwrite.mli
-ocamlopt.opt -c pdfwrite.ml
-ocamlopt.opt -c pdfcodec.mli
-ocamlopt.opt -c pdfcodec.ml
-ocamlopt.opt -c pdfread.mli
-ocamlopt.opt -c pdfread.ml
-ocamlopt.opt -c pdfpages.mli
-ocamlopt.opt -c pdfpages.ml
-ocamlopt.opt -c pdfdoc.mli
-ocamlopt.opt -c pdfdoc.ml
-ocamlopt.opt -c pdfannot.mli
-ocamlopt.opt -c pdfannot.ml
-ocamlopt.opt -c pdffun.mli
-ocamlopt.opt -c pdffun.ml
-ocamlopt.opt -c pdfspace.mli
-ocamlopt.opt -c pdfspace.ml
-ocamlopt.opt -c pdfimage.mli
-ocamlopt.opt -c pdfimage.ml
-ocamlopt.opt -c glyphlist.mli
-ocamlopt.opt -c glyphlist.ml
-ocamlopt.opt -c pdftext.mli
-ocamlopt.opt -c pdftext.ml
-ocamlopt.opt -c fonttables.mli
-ocamlopt.opt -c fonttables.ml
-ocamlopt.opt -c pdfgraphics.mli
-ocamlopt.opt -c pdfgraphics.ml
-ocamlopt.opt -c pdfshapes.mli
-ocamlopt.opt -c pdfshapes.ml
-ocamlopt.opt -c pdfmarks.mli
-ocamlopt.opt -c pdfmarks.ml
-ocamlopt.opt -c pdfdate.mli
-ocamlopt.opt -c pdfdate.ml
-ocamlopt.opt -c cff.mli
-ocamlopt.opt -c cff.ml
+ocamlopt.opt -c %CFLAGS% utility.mli
+ocamlopt.opt -c %CFLAGS% utility.ml
+ocamlopt.opt -c %CFLAGS% istring.mli
+ocamlopt.opt -c %CFLAGS% istring.ml
+ocamlopt.opt -c %CFLAGS% io.mli
+ocamlopt.opt -c %CFLAGS% io.ml
+ocamlopt.opt -c %CFLAGS% unzip.mli
+ocamlopt.opt -c %CFLAGS% unzip.ml
+ocamlopt.opt -c %CFLAGS% pdfio.mli
+ocamlopt.opt -c %CFLAGS% pdfio.ml
+ocamlopt.opt -c %CFLAGS% cgenlex.mli
+ocamlopt.opt -c %CFLAGS% cgenlex.ml
+REM ocamlopt.opt -c zlib.mli
+REM ocamlopt.opt -c zlib.ml
+ocamlopt.opt -c %CFLAGS% transform.mli
+ocamlopt.opt -c %CFLAGS% transform.ml
+ocamlopt.opt -c %CFLAGS% units.mli
+ocamlopt.opt -c %CFLAGS% units.ml
+ocamlopt.opt -c %CFLAGS% paper.mli
+ocamlopt.opt -c %CFLAGS% paper.ml
+ocamlopt.opt -c %CFLAGS% pdf.mli
+ocamlopt.opt -c %CFLAGS% pdf.ml
+ocamlopt.opt -c %CFLAGS% pdfcrypt.mli
+ocamlopt.opt -c %CFLAGS% pdfcrypt.ml
+ocamlopt.opt -c %CFLAGS% pdfwrite.mli
+ocamlopt.opt -c %CFLAGS% pdfwrite.ml
+ocamlopt.opt -c %CFLAGS% pdfcodec.mli
+ocamlopt.opt -c %CFLAGS% pdfcodec.ml
+ocamlopt.opt -c %CFLAGS% pdfread.mli
+ocamlopt.opt -c %CFLAGS% pdfread.ml
+ocamlopt.opt -c %CFLAGS% pdfpages.mli
+ocamlopt.opt -c %CFLAGS% pdfpages.ml
+ocamlopt.opt -c %CFLAGS% pdfdoc.mli
+ocamlopt.opt -c %CFLAGS% pdfdoc.ml
+ocamlopt.opt -c %CFLAGS% pdfannot.mli
+ocamlopt.opt -c %CFLAGS% pdfannot.ml
+ocamlopt.opt -c %CFLAGS% pdffun.mli
+ocamlopt.opt -c %CFLAGS% pdffun.ml
+ocamlopt.opt -c %CFLAGS% pdfspace.mli
+ocamlopt.opt -c %CFLAGS% pdfspace.ml
+ocamlopt.opt -c %CFLAGS% pdfimage.mli
+ocamlopt.opt -c %CFLAGS% pdfimage.ml
+ocamlopt.opt -c %CFLAGS% glyphlist.mli
+ocamlopt.opt -c %CFLAGS% glyphlist.ml
+ocamlopt.opt -c %CFLAGS% pdftext.mli
+ocamlopt.opt -c %CFLAGS% pdftext.ml
+ocamlopt.opt -c %CFLAGS% fonttables.mli
+ocamlopt.opt -c %CFLAGS% fonttables.ml
+ocamlopt.opt -c %CFLAGS% pdfgraphics.mli
+ocamlopt.opt -c %CFLAGS% pdfgraphics.ml
+ocamlopt.opt -c %CFLAGS% pdfshapes.mli
+ocamlopt.opt -c %CFLAGS% pdfshapes.ml
+ocamlopt.opt -c %CFLAGS% pdfmarks.mli
+ocamlopt.opt -c %CFLAGS% pdfmarks.ml
+ocamlopt.opt -c %CFLAGS% pdfdate.mli
+ocamlopt.opt -c %CFLAGS% pdfdate.ml
+ocamlopt.opt -c %CFLAGS% cff.mli
+ocamlopt.opt -c %CFLAGS% cff.ml
 
-ocamlopt.opt -verbose -a -o cpdf.cmxa -ccopt "%CCOPT%" -cclib -lcamlpdf -cclib -lz utility.cmx istring.cmx io.cmx unzip.cmx pdfio.cmx cgenlex.cmx zlib.cmx transform.cmx units.cmx paper.cmx pdf.cmx pdfcrypt.cmx pdfwrite.cmx pdfcodec.cmx pdfread.cmx pdfpages.cmx pdfdoc.cmx pdfannot.cmx pdffun.cmx pdfspace.cmx pdfimage.cmx glyphlist.cmx pdftext.cmx fonttables.cmx pdfgraphics.cmx pdfshapes.cmx pdfmarks.cmx pdfdate.cmx cff.cmx 
+ocamlfind ocamlopt -package zip,bigarray -a -o cpdf.cmxa -ccopt "%CCOPT%" -cclib -lcamlpdf -cclib -lz utility.cmx istring.cmx io.cmx unzip.cmx pdfio.cmx cgenlex.cmx transform.cmx units.cmx paper.cmx pdf.cmx pdfcrypt.cmx pdfwrite.cmx pdfcodec.cmx pdfread.cmx pdfpages.cmx pdfdoc.cmx pdfannot.cmx pdffun.cmx pdfspace.cmx pdfimage.cmx glyphlist.cmx pdftext.cmx fonttables.cmx pdfgraphics.cmx pdfshapes.cmx pdfmarks.cmx pdfdate.cmx cff.cmx 
 
 :test =========================================================================
-ocamlopt.opt -verbose -o pdfhello.exe unix.cmxa bigarray.cmxa cpdf.cmxa pdfhello.ml 
+ocamlfind ocamlopt -package zip,bigarray -linkpkg -o pdfhello.exe cpdf.cmxa pdfhello.ml 
 pdfhello
 hello.pdf
 
@@ -104,20 +106,11 @@ ocamldoc -html -t "Camlpdf" -d doc *.mli
 
 ocamlfind remove cpdf
 @echo version="0.5" > META
-@echo requires="" >> META
+@echo requires="unix,bigarray,zip" >> META
 @echo archive(byte)="cpdf.cma,cpdf.cma" >> META
 @echo archive(native)="cpdf.cmxa,cpdf.cmxa" >> META
 ocamlfind install cpdf META *.cm?a *.cmi *.mli *.lib *.dll >> META
 pause
-
-@rem mkdir %INSTALLDIR%
-@rem copy *.cmi %INSTALLDIR%
-@rem copy *.cmxa %INSTALLDIR%
-@rem copy *.mli %INSTALLDIR%
-@rem copy cpdf.lib %INSTALLDIR%
-@rem copy libcamlpdf.lib "%OCAMLLIB%"
-@rem copy dllcamlpdf.dll "%OCAMLLIB%"\stublibs
-@rem mkdir %INSTALLDIR_DOC%
 
 copy doc\* %INSTALLDIR_DOC%
 

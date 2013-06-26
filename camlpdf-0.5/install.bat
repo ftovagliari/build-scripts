@@ -100,16 +100,25 @@ hello.pdf
 :doc ==========================================================================
 mkdir doc
 ocamldoc -html -t "Camlpdf" -d doc *.mli
-
 :install ======================================================================
-mkdir %INSTALLDIR%
-copy *.cmi %INSTALLDIR%
-copy *.cmxa %INSTALLDIR%
-copy *.mli %INSTALLDIR%
-copy cpdf.lib %INSTALLDIR%
-copy libcamlpdf.lib "%OCAMLLIB%"
-copy dllcamlpdf.dll "%OCAMLLIB%"\stublibs
-mkdir %INSTALLDIR_DOC%
+
+ocamlfind remove cpdf
+@echo version="0.5" > META
+@echo requires="" >> META
+@echo archive(byte)="cpdf.cma,cpdf.cma" >> META
+@echo archive(native)="cpdf.cmxa,cpdf.cmxa" >> META
+ocamlfind install cpdf META *.cm?a *.cmi *.mli *.lib *.dll >> META
+pause
+
+@rem mkdir %INSTALLDIR%
+@rem copy *.cmi %INSTALLDIR%
+@rem copy *.cmxa %INSTALLDIR%
+@rem copy *.mli %INSTALLDIR%
+@rem copy cpdf.lib %INSTALLDIR%
+@rem copy libcamlpdf.lib "%OCAMLLIB%"
+@rem copy dllcamlpdf.dll "%OCAMLLIB%"\stublibs
+@rem mkdir %INSTALLDIR_DOC%
+
 copy doc\* %INSTALLDIR_DOC%
 
 @rmdir /S /Q doc

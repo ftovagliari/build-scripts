@@ -20,18 +20,18 @@ set OCAMLLIB=%OCAMLLIB%
 set ZLIB=C:\zlib
 set INSTALLDIR="%OCAMLLIB%"\cpdf
 set INSTALLDIR_DOC="%OCAMLLIB%"\..\doc\cpdf
-@rem set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib -L%ZLIB%\lib
 set CCOPT=-LC:\PROGRA~1\MICROS~3\v7.0\lib -LC:\PROGRA~2\MICROS~1.0\VC\lib -LC:\PROGRA~2\MICROS~1.0\VC\ATLFMC\lib -L%ZLIB%\lib
 
 set CFLAGS=-I +site-lib/zip
 
 @REM End of Configuration Section ==============================================
 
-@del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll
+@del *.obj *.lib *.cm* *.exe hello.pdf dllcamlpdf.dll *.manifest
+pause
 
-cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /I%ZLIB%\include /DPIC 
-lib /nologo /out:libcamlpdf.lib /libpath:%ZLIB%\lib zlibstat.lib zlibstubs.obj
-flexlink -o dllcamlpdf.dll zlibstubs.obj zlibstat.lib %CCOPT% -L%ZLIB%\lib -default-manifest
+@rem cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /I%ZLIB%\include /DPIC 
+@rem lib /nologo /out:libcamlpdf.lib /libpath:%ZLIB%\lib zlibstat.lib zlibstubs.obj
+@rem flexlink -o dllcamlpdf.dll zlibstubs.obj zlibstat.lib %CCOPT% -L%ZLIB%\lib -default-manifest
 
 ocamlopt.opt -c %CFLAGS% utility.mli
 ocamlopt.opt -c %CFLAGS% utility.ml
@@ -92,7 +92,8 @@ ocamlopt.opt -c %CFLAGS% pdfdate.ml
 ocamlopt.opt -c %CFLAGS% cff.mli
 ocamlopt.opt -c %CFLAGS% cff.ml
 
-ocamlfind ocamlopt -package zip,bigarray -a -o cpdf.cmxa -ccopt "%CCOPT%" -cclib -lcamlpdf -cclib -lz utility.cmx istring.cmx io.cmx unzip.cmx pdfio.cmx cgenlex.cmx transform.cmx units.cmx paper.cmx pdf.cmx pdfcrypt.cmx pdfwrite.cmx pdfcodec.cmx pdfread.cmx pdfpages.cmx pdfdoc.cmx pdfannot.cmx pdffun.cmx pdfspace.cmx pdfimage.cmx glyphlist.cmx pdftext.cmx fonttables.cmx pdfgraphics.cmx pdfshapes.cmx pdfmarks.cmx pdfdate.cmx cff.cmx 
+@rem ocamlfind ocamlopt -package zip,bigarray -a -o cpdf.cmxa -ccopt "%CCOPT%" -cclib -lcamlpdf -cclib -lz utility.cmx istring.cmx io.cmx unzip.cmx pdfio.cmx cgenlex.cmx transform.cmx units.cmx paper.cmx pdf.cmx pdfcrypt.cmx pdfwrite.cmx pdfcodec.cmx pdfread.cmx pdfpages.cmx pdfdoc.cmx pdfannot.cmx pdffun.cmx pdfspace.cmx pdfimage.cmx glyphlist.cmx pdftext.cmx fonttables.cmx pdfgraphics.cmx pdfshapes.cmx pdfmarks.cmx pdfdate.cmx cff.cmx 
+ocamlfind ocamlopt -package zip,bigarray -a -o cpdf.cmxa utility.cmx istring.cmx io.cmx unzip.cmx pdfio.cmx cgenlex.cmx transform.cmx units.cmx paper.cmx pdf.cmx pdfcrypt.cmx pdfwrite.cmx pdfcodec.cmx pdfread.cmx pdfpages.cmx pdfdoc.cmx pdfannot.cmx pdffun.cmx pdfspace.cmx pdfimage.cmx glyphlist.cmx pdftext.cmx fonttables.cmx pdfgraphics.cmx pdfshapes.cmx pdfmarks.cmx pdfdate.cmx cff.cmx 
 
 :test =========================================================================
 ocamlfind ocamlopt -package zip,bigarray -linkpkg -o pdfhello.exe cpdf.cmxa pdfhello.ml 
@@ -101,7 +102,7 @@ hello.pdf
 
 :doc ==========================================================================
 mkdir doc
-ocamldoc -html -t "Camlpdf" -d doc *.mli
+ocamldoc -html -t "CamlPDF" -d doc *.mli
 :install ======================================================================
 
 ocamlfind remove cpdf
@@ -109,7 +110,8 @@ ocamlfind remove cpdf
 @echo requires="unix,bigarray,zip" >> META
 @echo archive(byte)="cpdf.cma,cpdf.cma" >> META
 @echo archive(native)="cpdf.cmxa,cpdf.cmxa" >> META
-ocamlfind install cpdf META *.cm?a *.cmi *.mli *.lib *.dll >> META
+ocamlfind install cpdf META *.cm?a *.cmi *.mli *.lib 
+@rem *.dll 
 pause
 
 copy doc\* %INSTALLDIR_DOC%

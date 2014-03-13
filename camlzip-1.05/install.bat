@@ -1,37 +1,32 @@
 @cls
-@call ..\build-scripts\setenv.bat
-@for %%F in (%cd%) do @set name=%%~nF%%~xF
-@title "Installing %name%"
 @setlocal
-@set cwd=%cd%
-@call "%ProgramFiles(x86)%\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
-@cd %cwd%
-@echo Current working directory: %cd%
-
-@set OCAMLLIB=
-@for /f %%x in ('ocamlc -where') do @set OCAMLLIB=%%x
-@set OCAMLLIB=%OCAMLLIB:/=\%
-@echo OCAMLLIB=%OCAMLLIB%
+@call ..\..\devel\build-scripts\setenv.bat
 
 @REM Configuration Section ====================================================
 
-set LIB=%LIB%
-set INCLUDE=%INCLUDE%
-set OCAMLLIB=%OCAMLLIB%
-set ZLIB=C:\zlib
-set INSTALLDIR=%OCAMLLIB%\zip
-set INSTALLDIR_DOC=%OCAMLLIB%\..\doc\zip
-@rem set CCOPT=-LC:\Programmi\MIC977~1\Lib -LC:\Programmi\MID05A~1\VC\lib -LC:\zlib\lib
-set CCOPT=-LC:\PROGRA~1\MICROS~3\v7.0\lib -LC:\PROGRA~2\MICROS~1.0\VC\lib -LC:\PROGRA~2\MICROS~1.0\VC\ATLFMC\lib -L%ZLIB%\lib
+@set LIB=%LIB%
+@set INCLUDE=%INCLUDE%
+@set OCAMLLIB=%OCAMLLIB%
+@set ZLIB=D:\zlib
+@echo ZLIB     = %ZLIB%
+@echo INCLUDE  = %INCLUDE%
+@echo LIB      = %LIB%
+for %%A in ("C:\Program Files\Microsoft SDKs\Windows\v7.0\Lib") do @set F1=%%~sA
+for %%A in ("C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\lib") do @set F2=%%~sA
+for %%A in ("C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\atlmfc\lib") do @set F3=%%~sA
+@set CCOPT=-L%F1% -L%F2% -L%F3% -L%ZLIB%\lib
 
 @REM End of Configuration Section ==============================================
 
-@del *.obj *.lib *.cm* *.exe *.dll dllcamlzip.dll.manifest
+@del *.obj *.lib *.cm* *.exe *.dll dllcamlzip.dll.manifest 2>NUL
 cl /nologo -c zlibstubs.c /I"%OCAMLLIB%" /I%ZLIB%\include /D ZLIB_WINAPI
 
-lib /nologo /out:libcamlzip.lib /libpath:%ZLIB%\lib zlibstat.lib zlibstubs.obj
-flexlink -o dllcamlzip.dll zlibstubs.obj zlibstat.lib %CCOPT% -default-manifest
-flexlink -o dllcamlzlib.dll zlibstubs.obj zlibstat.lib %CCOPT% -default-manifest
+@rem Copy %ZLIB%\lib\libstat.lib to %ZLIB%\lib\libz.lib
+@if not exist %ZLIB%\lib\libz.lib copy %ZLIB%\lib\libstat.lib %ZLIB%\lib\libz.lib
+@set LIBSTAT=libz.lib
+lib /nologo /out:libcamlzip.lib /libpath:%ZLIB%\lib %LIBSTAT% zlibstubs.obj
+flexlink -o dllcamlzip.dll zlibstubs.obj %LIBSTAT% %CCOPT% -default-manifest
+flexlink -o dllcamlzlib.dll zlibstubs.obj %LIBSTAT% %CCOPT% -default-manifest
 
 ocamlc.opt -g -c zlib.mli
 ocamlc.opt -g -c zlib.ml
@@ -53,18 +48,16 @@ ocamlopt.opt -g -c gzip.ml
 ocamlopt.opt -verbose -g -a -o zlib.cmxa -ccopt "%CCOPT%" -cclib -lcamlzip -cclib -lz zlib.cmx 
 ocamlopt.opt -verbose -g -a -o zip.cmxa -ccopt "%CCOPT%" -cclib -lcamlzip -cclib -lz zip.cmx gzip.cmx 
 
-
 :test =========================================================================
 pushd test
-@del *.obj *.lib *.cm* *.exe *.zip
+@del *.obj *.lib *.cm* *.exe *.zip 2>NUL
 @ocamlopt.opt -g -o minizip.exe -I .. unix.cmxa ../zlib.cmxa ../zip.cmxa minizip.ml 
 minizip c test.zip testzlib.ml minizip.ml minigzip.ml
-test.zip
-@del test.zip *.exe *.obj *.cm*
+@test.zip
 @popd
 
 : doc ==========================================================================
-mkdir doc
+@mkdir doc 2>NUL
 ocamldoc -html -t "Camlzip" -d doc *.mli
 
 :install ======================================================================
@@ -74,3 +67,6 @@ ocamlfind install zip META *.cma *.cmxa *.cmi *.mli *.lib *.dll
 :exit =========================================================================
 @endlocal
 @pause
+@pushd test
+@del test.zip *.exe *.obj *.cm*
+@popd
